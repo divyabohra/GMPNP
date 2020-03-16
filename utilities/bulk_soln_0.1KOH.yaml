@@ -1,0 +1,13 @@
+bulk_conc_pre_CO2:
+  conc_electrolyte: 0.1
+  concentrations: {C0_CO2: 0.0, C0_CO32: 0.0, C0_Cl: 0.0, C0_H: 1.0e-10, C0_HCO3: 0.0,
+    C0_K: 100.0, C0_OH: 100.0}
+  electrolyte: KOH
+  final_pH: 13.0
+bulk_conc_post_CO2:
+  CO2_pressure: 1
+  conc_electrolyte: 0.1
+  concentrations: {C0_CO2: 34.06103747827045, C0_CO32: 0.03982755580290724, C0_Cl: 0.0,
+    C0_H: 0.00014068164312609784, C0_HCO3: 99.92027352487999, C0_K: 100.0, C0_OH: 7.108247940377446e-05}
+  electrolyte: KOH
+  final_pH: 6.851762567875496

@@ -1,0 +1,9 @@
+bulk_conc_pre_CO2: Concentrations before adding CO2 will be same as on adding CO2
+    since solution is already saturated
+bulk_conc_post_CO2:
+  CO2_pressure: 1
+  conc_electrolyte: 10.0
+  concentrations: {C0_CO2: 34.06103747827045, C0_CO32: 2740.757429562871, C0_H: 9.244413743207952e-08,
+    C0_HCO3: 4518.37739067546, C0_K: 10000.0, C0_OH: 0.10817343617216592}
+  electrolyte: KHCO3
+  final_pH: 10.034120625463476

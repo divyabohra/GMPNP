@@ -1,0 +1,68 @@
+rate_constants:
+    kw1 : 2.4e-2 #molm-3s-1 (NL-3T-1)
+    kw2 : 2.4e+6 #mol-1m3s-1 (N-1L3T-1)
+    ka1 : 6.0e+6 #mol-1m3s-1 (N-1L3T-1)
+    ka2 : 1.07e+6 #in s-1
+    kb1 : 2.23 #mol-1m3s-1 (N-1L3T-1)
+    kb2 : 5.23e-5 #in s-1
+
+diff_coef: #in m2s-1 (L2T-1)
+    D_H : 9.311e-9 
+    D_OH : 5.273e-9
+    D_CO2 : 1.91e-9
+    D_HCO3 : 1.185e-9
+    D_CO32 : 0.923e-9
+    D_K : 1.957e-9
+    D_Na : 1.334e-9
+    D_Li : 1.029e-9
+    D_Cs : 2.06e-9
+    D_Cl : 2.032e-9
+
+solv_size: #in m, find in Marcus, Entremont and ncbi study
+    a_H : 0.56e-9 
+    a_OH : 0.6e-9
+    a_CO2 : 0.23e-9 #no solvation
+    a_HCO3 : 0.8e-9 #guess value
+    a_CO32 : 0.788e-9 
+    a_K : 0.662e-9
+    a_Cs : 0.658e-9
+    a_Na : 0.716e-9
+    a_Li : 0.764e-9
+    a_Cl : 0.664e-9
+    
+nat_const:
+    F : 9.6485e+4 #in Cmol-1 (ITN-1)
+    e_0 : 1.602e-19 #in C (IT)
+    N_A : 6.022e+23 #in mol-1 (N-1)
+    k_B : 1.38e-23 #in JK-1 (ML2T-2Theta-1)
+    R : 8.314 #in JK-1mol-1 (ML2T-2Theta-1N-1)
+    eps_0 : 8.85e-12 #in Fm-1 (I2T4M-1L-3)
+    eps_rel : 80.1
+    T : 298.15 #in K(Theta)
+    
+L_diff_default : 2.0e-4 #in m(L), default
+
+bulk_conc_default:  #in molm-3 (NL-3) for 0.1 M KHCO3 (pH=6.85), 1 atm CO2, no KCl added
+    C0_H : 1.4e-4
+    C0_OH : 7.1e-5
+    C0_CO2 : 32.9
+    C0_HCO3 : 100
+    C0_CO32 : 4.0e-2
+    C0_K : 100.04
+    C0_Cl : 0
+
+sechonov_const: #in m3kmol-1
+    h_ion_Li : 0.0754
+    h_ion_Na : 0.1143
+    h_ion_K : 0.0922
+    h_ion_Cl : 0.0318
+    h_ion_OH : 0.0839
+    h_ion_HCO3 : 0.0967
+    h_ion_CO32 : 0.1423
+    h_ion_H2PO4 : 0.0906
+    h_ion_HPO4 : 0.1499
+    h_ion_PO4 : 0.2119
+    h_CO2_0 : -0.0172
+    h_CO2_T : -0.000338
+
+    
