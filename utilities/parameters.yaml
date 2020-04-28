@@ -22,7 +22,7 @@ solv_size: #in m, find in Marcus, Entremont and ncbi study
     a_H : 0.56e-9 
     a_OH : 0.6e-9
     a_CO2 : 0.23e-9 #no solvation
-    a_HCO3 : 0.8e-9 #guess value
+    a_HCO3 : 0.8e-9
     a_CO32 : 0.788e-9 
     a_K : 0.662e-9
     a_Cs : 0.658e-9
