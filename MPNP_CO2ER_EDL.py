@@ -307,7 +307,15 @@ def solve_EDL(
     Y = FunctionSpace(mesh, 'P', degree)
 
     # Define test functions
-    v_H, v_OH, v_HCO3, v_CO32, v_CO2, v_cat, v_p = TestFunctions(V)  # pylint: disable=unbalanced-tuple-unpacking
+    (  # pylint: disable=unbalanced-tuple-unpacking
+        v_H,
+        v_OH,
+        v_HCO3,
+        v_CO32,
+        v_CO2,
+        v_cat,
+        v_p
+    ) = TestFunctions(V)
 
     # Define functions for the concentrations and potential
     u = Function(V)  # at t_n+1
@@ -318,9 +326,27 @@ def solve_EDL(
     # initializing concentration as bulk and voltage as grounded
     u_n = project(u_0, V)
 
-    # Split system functions to access components
-    u_H, u_OH, u_HCO3, u_CO32, u_CO2, u_cat, u_p = split(u)  # pylint: disable=unbalanced-tuple-unpacking
-    u_nH, u_nOH, u_nHCO3, u_nCO32, u_nCO2, u_ncat, u_np = split(u_n)  # pylint: disable=unbalanced-tuple-unpacking
+    # accessing components at t=t_n+1
+    (  # pylint: disable=unbalanced-tuple-unpacking
+        u_H,
+        u_OH,
+        u_HCO3,
+        u_CO32,
+        u_CO2,
+        u_cat,
+        u_p
+    ) = split(u)
+
+    # accessing components t=t_n
+    (  # pylint: disable=unbalanced-tuple-unpacking
+        u_nH,
+        u_nOH,
+        u_nHCO3,
+        u_nCO32,
+        u_nCO2,
+        u_ncat,
+        u_np
+    ) = split(u_n)
 
     bulk = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0]
     # Constant values for concentrations in bulk and grounded potential
