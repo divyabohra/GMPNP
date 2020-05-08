@@ -76,7 +76,9 @@ def solve_EDL(
         stabilization='N',
         H_OHP=None,
         cation='K',
-        params_file='parameters'):
+        params_file='parameters',
+        dry_run=True
+):
 
     tol = 1.0e-14  # tolerance for coordinate comparisons
     stamp = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
@@ -253,37 +255,41 @@ def solve_EDL(
         else:
             return False
 
-    # without staging for trouble shooting
-    # 1e-5 sufficient for 50 microns, 1e-3 sufficient for 1 micron or less.
-    time_step = 1.0e-5
-    total_sim_time = 1.0e-3
+    if dry_run:
+        # without staging time for trouble shooting purposes
+        # runs for 100 time steps
+        # 1e-5 sufficient for 50 microns, 1e-3 sufficient for 1 micron or less.
+        time_step = 1.0e-5
+        total_sim_time = 1.0e-3
 
-    T = total_sim_time / time_constant  # final time
-    dt = time_step / time_constant    # step size
-    num_steps = total_sim_time / time_step  # number of steps
-    del_t = Constant(dt)
-    tot_num_steps = int(num_steps)
+        T = total_sim_time / time_constant  # final time
+        dt = time_step / time_constant    # step size
+        num_steps = total_sim_time / time_step  # number of steps
+        del_ts = [Constant(dt)]
+        del_t = del_ts[0]
+        tot_num_steps = int(num_steps)
 
-    '''
-    # we use 2 time step sizes serially over the total simulation time
-    time_step_1 = 1.0e-5
-    time_step_2 = 1.0e-3
-    total_sim_time_1 = 0.1 #i n sec
-    total_sim_time_2 = 10.1 # in sec
+    else:
+        # we use 2 time step sizes serially over the
+        # total simulation time to reach steady state
+        time_step_1 = 1.0e-5
+        time_step_2 = 1.0e-3
+        total_sim_time_1 = 0.1  # in sec
+        total_sim_time_2 = 10.1  # in sec
 
-    T_1 = total_sim_time_1 / time_constant  # final time
-    dt_1 = time_step_1 / time_constant    # step size
-    num_steps_1 = int(total_sim_time_1 / time_step_1)
-    del_t_1 = Constant(dt_1)
+        T_1 = total_sim_time_1 / time_constant  # final time
+        dt_1 = time_step_1 / time_constant    # step size
+        num_steps_1 = int(total_sim_time_1 / time_step_1)
 
-    T_2 = total_sim_time_2 / time_constant  # final time
-    dt_2 = time_step_2 / time_constant    # step size
-    num_steps_2 = int((total_sim_time_2 - total_sim_time_1) / time_step_2)
-    del_t_2 = Constant(dt_2)
+        T_2 = total_sim_time_2 / time_constant  # final time
+        dt_2 = time_step_2 / time_constant    # step size
+        num_steps_2 = int((total_sim_time_2 - total_sim_time_1) / time_step_2)
 
-    del_t = del_t_1
-    tot_num_steps = num_steps_1 + num_steps_2
-    '''
+        del_ts = [Constant(dt_1), Constant(dt_2)]
+        del_t = del_ts[0]  # start with smaller time step size
+        dts = [dt_1, dt_2]
+        dt = dts[0]
+        tot_num_steps = num_steps_1 + num_steps_2
 
     basepath = 'out/'+model+'/'
 
@@ -601,19 +607,18 @@ def solve_EDL(
     t = 0
     for n in range(tot_num_steps):
 
-        '''
-        ## with staging
-        # Update current time
-        if t < T_1:
-            dt = dt_1
-            del_t = del_t_1
-            print(int(t/dt))
-        else: #t >= T_1 and t < T2:
-            dt = dt_2
-            del_t = del_t_2
-            print(int(num_steps_1 + (t - T_1)/dt))
-        ## with staging
-        '''
+        if dry_run:
+            print(int(t / dt))
+        else:
+            # Update current time
+            if t >= T_1:
+                # choose the larger time step beyond T_1
+                dt = dts[1]
+                del_t = del_ts[1]
+                # adjust number of steps
+                print(int(num_steps_1 + (t - T_1) / dt))
+            else:
+                print(int(t / dt))
 
         t += dt
 
@@ -764,7 +769,6 @@ def solve_EDL(
 
         # Update previous solution
         u_n.assign(u)
-        print(int(t / dt))  # comment out when staging time
 
     end_time = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
 
@@ -775,15 +779,15 @@ def solve_EDL(
     field_values_rescaled = field_values * thermal_voltage / L_n
     field_OHP = field_values_rescaled[0] * 1.0e-9  # in V/nm
 
-    # time points as array without staging
-    tau_array = np.linspace(0, T, tot_num_steps)
-
-    '''
-    # with staging
-    tau_array_1 = np.linspace(0, T_1, num_steps_1)
-    tau_array_2 = np.linspace(T_1 + dt_2, T_2, num_steps_2)
-    tau_array = np.concatenate((tau_array_1,tau_array_2))
-    '''
+    if dry_run:
+        # time points as array without staging
+        tau_array = np.linspace(0, T, tot_num_steps)
+    else:
+        # with staging
+        tau_array_1 = np.linspace(0, T_1, num_steps_1)
+        tau_array_2 = np.linspace(T_1 + dts[1], T_2, num_steps_2)
+        # concatenate the two time step arrays
+        tau_array = np.concatenate((tau_array_1, tau_array_2))
 
     if stabilization != 'Y':
         Pe = None
@@ -1062,6 +1066,15 @@ if __name__ == '__main__':
         type=str
     )
 
+    parser.add_argument(
+        '--dry_run',
+        metavar='run 100 time steps as test',
+        required=False,
+        help='boolean value',
+        default=True,
+        type=bool
+    )
+
     args = parser.parse_args()
 
     solve_EDL(
@@ -1074,5 +1087,6 @@ if __name__ == '__main__':
         L_n=args.L_n,
         stabilization=args.stabilization,
         H_OHP=args.H_OHP,
-        cation=args.cation
+        cation=args.cation,
+        dry_run=args.dry_run
     )
