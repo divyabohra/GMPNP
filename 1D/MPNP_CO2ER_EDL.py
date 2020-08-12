@@ -29,7 +29,7 @@ partial current density data.
 The values of the forward and backward rate constants are taken from \
 literature and can be found in parameters.yaml file
 
-Species solved for (i): H+, OH-, HCO3-, CO32-, CO2, cat+, Cl-
+Species solved for (i): H+, OH-, HCO3-, CO32-, CO2, cat+
 
 '''
 
@@ -84,7 +84,7 @@ def solve_EDL(
     stamp = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
 
     # change below path for accessing utilities
-    basepath_utilities = 'utilities/'
+    basepath_utilities = '/Users/divyabohra/docs/Project2/mpnp-1d/utilities/'
 
     # read rate constants of homogeneous reactions, diffusion coefficients \
     # and diffusion length from yaml file storing default parameters
@@ -291,7 +291,8 @@ def solve_EDL(
         dt = dts[0]
         tot_num_steps = num_steps_1 + num_steps_2
 
-    basepath = 'out/'+model+'/'
+    # define path to store simulation output folder
+    basepath = '/Users/divyabohra/docs/Project2/mpnp-1d/1D/out/'+model+'/'
 
     newpath = basepath+stamp+'_experiment/'+identifier
     if not os.path.exists(newpath):
@@ -1114,5 +1115,6 @@ if __name__ == '__main__':
         stabilization=args.stabilization,
         H_OHP=args.H_OHP,
         cation=args.cation,
+        params_file=args.params_file,
         dry_run=args.dry_run
     )
