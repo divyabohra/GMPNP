@@ -44,12 +44,10 @@ import os
 import argparse
 import json
 
+
 # Below function is used to scale back the calculated variables from \
 # dimentionless form to SI units
-# tau is scaled time, C is scaled concentration, chi is scaled distance, \
-# phi is scaled potential
-
-
+# tau is scaled time, C is scaled concentration
 def scale(
         species='H',
         tau=None,
@@ -369,7 +367,7 @@ def solve_EDL(
     # and CO2 at the OHP (x=0) (no flux bc, currents)
     CO_FE = 1 - H2_FE  # Faradaic efficiency of CO production
 
-    # at OHP
+    # flux at OHP
     J_CO2 = Constant(J_CO2_prefactor * current_OHP_ss * 0.5 * (CO_FE))
     J_OH = Constant(
         J_OH_prefactor * current_OHP_ss * (1 - current_H_frac) * (-1.0)
