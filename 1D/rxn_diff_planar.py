@@ -25,7 +25,7 @@ partial current density data from previous publications.
 The values of the forward and backward rate constants are taken from \
 literature.
 
-Species solved for (i): H+, OH-, HCO3-, CO32-, CO2, K+, Cl-
+Species solved for (i): H+, OH-, HCO3-, CO32-, CO2, K+
 
 '''
 
@@ -117,6 +117,7 @@ def metadata(
 
 
 # function to read csv file to return lists
+# if using experimental data
 def readIVdata(filename):
     volt = []
     HCOO = []
@@ -235,8 +236,6 @@ def main(
         # at OHP
         J_CO2 = Constant(J_CO2_prefactor * current_OHP_ss * 0.5 * (CO_FE))
         J_OH = Constant(J_OH_prefactor * current_OHP_ss * (-1.0))
-        J_CO2 = Constant(J_CO2_prefactor * current_OHP_ss * 0.5 * (CO_FE))
-        J_OH = Constant(J_OH_prefactor * current_OHP_ss * (-1.0))
 
         identifier = 'H2_FE_' + str(H2_FE) + '_current_' + str(current_OHP_ss)\
             + '_L_n_' + str(L_n)
@@ -301,9 +300,6 @@ def main(
         bulk = [1.0, 1.0, 1.0, 1.0, 1.0]
         # Constant values for concentrations in bulk
         bcs = DirichletBC(V, bulk, boundary_R)
-        # Dirichlet condition for CO2 at the OHP to calculate limiting current
-        # bc2 = DirichletBC(V.sub(4), 0.01, boundary_L)
-        # bcs = [bc1,bc2]
 
         # Neumann condition will be used for all species at the OHP (x=0)
         # R_i are the rates of production of species i (scaled)
@@ -406,22 +402,6 @@ def main(
             CO32 = np.vstack((CO32, _u_CO32_nodal_values_array))
             CO2 = np.vstack((CO2, _u_CO2_nodal_values_array))
 
-            CO2_OHP_frac = _u_CO2_nodal_values_array[0]
-
-            if CO2_OHP_frac < 0:
-                current_OHP_ss = current_OHP_ss - 1
-            elif CO2_OHP_frac > 0.01 and CO2_OHP_frac <= 0.05:
-                current_OHP_ss = current_OHP_ss + 0.5
-            elif CO2_OHP_frac > 0.05 and CO2_OHP_frac <= 0.1:
-                current_OHP_ss = current_OHP_ss + 1
-            elif CO2_OHP_frac > 0.1 and CO2_OHP_frac <= 0.5:
-                current_OHP_ss = current_OHP_ss + 5
-            elif CO2_OHP_frac > 0.5:
-                current_OHP_ss = current_OHP_ss + 10
-            # at OHP
-            J_CO2 = Constant(J_CO2_prefactor * current_OHP_ss * 0.5 * (CO_FE))
-            J_OH = Constant(J_OH_prefactor * current_OHP_ss * (-1.0))
-
             # Update previous solution
             u_n.assign(u)
             print(n)
@@ -495,6 +475,9 @@ def main(
             c_K=c_K
         )
 
+        # storing concentration values at OHP as a function of time
+        # these values can be plotted to see the time evolution of
+        # species at the OHP
         H_surf = []
         OH_surf = []
         HCO3_surf = []
@@ -607,15 +590,6 @@ if __name__ == '__main__':
         required=False,
         help='float val, 10.0',
         default=10.0,
-        type=float
-    )
-
-    parser.add_argument(
-        '--current_OHP_ss',
-        metavar='total current in A/m2',
-        required=False,
-        help='float val, 100.0',
-        default=100.0,
         type=float
     )
 
