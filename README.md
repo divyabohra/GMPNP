@@ -1,4 +1,4 @@
-# 1D MPNP
+# 1D and 3D GMPNP
 
 This repository contains the implementation of **GMPNP** for a CO2 electrocatalysis system using the FEniCS finite element package in Python. The implementation is available for 
 
