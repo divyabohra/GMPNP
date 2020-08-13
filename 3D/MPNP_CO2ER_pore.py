@@ -344,6 +344,9 @@ def solveEDL(
             return near(x[2], 0, tol)
 
     # defining pore wall boundary
+    # the appropriate geometrical tolerance used for the boundary wall is
+    # derived using the mesh_tests.py to make sure all cells at the cylinder
+    # wall are marked
     class boundary_wall(SubDomain):
         def inside(self, x, on_boundary):
             if (R == 5.0e-9 or R == 50.0e-9) and L == 10.0e-9:
