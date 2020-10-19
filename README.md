@@ -41,3 +41,17 @@ As you will see in the scripts, you can vary all relevant parameters using comma
 The 3D pore scripts can be run following a similar procedure.
 
 And you are good to go!
+
+If you find this code useful, please cite it using the DOI: 10.5281/zenodo.4106373 or use the following BibTeX entry: 
+
+@software{divya_bohra_2020,
+  author       = {Divya Bohra},
+  title        = {{divyabohra/GMPNP: First release of 1D and 3D GMPNP 
+                   for CO2 electrocatalysis}},
+  month        = oct,
+  year         = 2020,
+  publisher    = {Zenodo},
+  version      = {v1.0.0},
+  doi          = {10.5281/zenodo.4106373},
+  url          = {https://doi.org/10.5281/zenodo.4106373}
+}
