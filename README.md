@@ -1,4 +1,5 @@
 # 1D and 3D GMPNP
+[![DOI](https://zenodo.org/badge/295436920.svg)](https://zenodo.org/badge/latestdoi/295436920)
 
 This repository contains the implementation of generalised modified Poisson-Nernst-Planck (**GMPNP**) for a CO2 electrocatalysis system using the FEniCS finite element package in Python. The implementation is available for 
 
