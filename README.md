@@ -42,7 +42,7 @@ The 3D pore scripts can be run following a similar procedure.
 
 And you are good to go!
 
-If you find this code useful, please cite it using the DOI: 10.5281/zenodo.4106373 or use the following BibTeX entry: 
+If you find this code useful, please **cite** it using the DOI: 10.5281/zenodo.4106373 or use the following BibTeX entry: 
 
 @software{divya_bohra_2020,
   author       = {Divya Bohra},
